@@ -5,9 +5,11 @@ class ShaderProgram:
         self.ctx = ctx
         self.programs = {}
         self.programs['default'] = self.get_program('default')
+        self.programs['enhanced'] = self.get_program('enhanced')
         self.programs['skybox'] = self.get_program('skybox')
         self.programs['advanced_skybox'] = self.get_program('advanced_skybox')
         self.programs['shadow_map'] = self.get_program('shadow_map')
+        self.programs['basic_post_processing'] = self.get_program('basic_post_processing')
 
     def get_program(self, shader_program_name):
         with open(f'shaders/{shader_program_name}.vert') as file:

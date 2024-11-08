@@ -7,6 +7,8 @@ from lighting import Light
 from mesh import Mesh
 from scene import Scene
 from scene_renderer import SceneRenderer
+from vao import VAO  # Import VAO class
+from texture import Texture
 
 
 class GraphicsEngine:
@@ -38,6 +40,10 @@ class GraphicsEngine:
 
         self.mesh = Mesh(self)
 
+        self.texture = Texture(self)  # Ensure Texture class is initialized
+
+        self.vaos = VAO(self.ctx)  # Initialize VAO here
+
         self.scene = Scene(self)
 
         self.scene_renderer = SceneRenderer(self)
@@ -51,17 +57,21 @@ class GraphicsEngine:
                 sys.exit()
 
     def render(self):
-
+        # Clear the screen
         self.ctx.clear(color=(0.18, 0.28, 0.28, 1.0))
 
+        # Call the scene renderer to handle rendering
         self.scene_renderer.render()
 
+        # Flip the display buffers
         pygame.display.flip()
 
     def get_time(self):
+        # Get the current time in seconds
         self.time = pygame.time.get_ticks() * 0.001
 
     def run(self):
+        # Main loop
         while True:
             self.get_time()
             self.check_events()

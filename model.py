@@ -91,6 +91,78 @@ class Cube(ExtendedBaseModel):
         super().__init__(app, vao_name, tex_id, pos, rot, scale)
 
 
+class RotatingCube(Cube):
+    def __init__(self, app, vao_name='cube', tex_id=0, pos=(0, 0, 0), rot=(0, 0, 0), scale=(1, 1, 1)):
+        super().__init__(app, vao_name, tex_id, pos, rot, scale)
+
+    def update(self):
+        self.m_model = self.get_model_matrix()
+        super().update()
+
+
+class AdvancedCube(Cube):
+    def __init__(self, app, vao_name='advanced_cube', tex_id=4, normal_id=9, pos=(0, 0, 0), rot=(0, 0, 0),
+                 scale=(1, 1, 1)):
+        super().__init__(app, vao_name, tex_id, pos, rot, scale)
+        self.on_init()
+        self.normal_id = normal_id
+        self.normal_texture = self.app.mesh.texture.textures[self.normal_id]
+        self.program['u_normal_0'] = 2
+        self.normal_texture.use(location=2)
+
+        self.ao_id = normal_id + 5
+        self.ao_texture = self.app.mesh.texture.textures[self.ao_id]
+        self.program['u_ao_0'] = 3
+        self.ao_texture.use(location=3)
+
+        self.smoothness_id = normal_id + 10
+        self.smoothness_texture = self.app.mesh.texture.textures[self.smoothness_id]
+        self.program['u_smoothness_0'] = 4
+        self.smoothness_texture.use(location=4)
+
+        self.metallic_id = normal_id + 15
+        self.metallic_texture = self.app.mesh.texture.textures[self.metallic_id]
+        self.program['u_metallic_0'] = 5
+        self.metallic_texture.use(location=5)
+
+        self.height_id = normal_id + 20
+        self.height_texture = self.app.mesh.texture.textures[self.height_id]
+        self.program['u_height_0'] = 6
+        self.height_texture.use(location=6)
+
+    def render(self):
+        self.update()
+
+        # Write texture units to the shader program
+        self.program['u_texture_0'] = 0
+        self.program['u_normal_0'] = 2
+        self.program['u_ao_0'] = 3
+        self.program['u_smoothness_0'] = 4
+        self.program['u_metallic_0'] = 5
+        self.program['u_height_0'] = 6
+
+        # Bind the textures to the appropriate texture units
+        self.texture.use(location=0)
+        self.normal_texture.use(location=2)
+        self.ao_texture.use(location=3)
+        self.smoothness_texture.use(location=4)
+        self.metallic_texture.use(location=5)
+        self.height_texture.use(location=6)
+
+        # Render the VAO
+        self.vao.render()
+
+
+class RotatingAdvancedCube(AdvancedCube):
+    def __init__(self, app, vao_name='advanced_cube', tex_id=4, normal_id=9, pos=(0, 0, 0), rot=(0, 0, 0),
+                 scale=(1, 1, 1)):
+        super().__init__(app, vao_name, tex_id, normal_id, pos, rot, scale)
+
+    def update(self):
+        self.m_model = self.get_model_matrix()
+        super().update()
+
+
 class Skull(ExtendedBaseModel):
     def __init__(self, app, vao_name='skull', tex_id='skull', pos=(0, 0, 0), rot=(-90, 0, 0), scale=(1, 1, 1)):
         super().__init__(app, vao_name, tex_id, pos, rot, scale)
