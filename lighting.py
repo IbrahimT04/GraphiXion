@@ -1,5 +1,4 @@
-import glm
-
+from pyglm import glm
 
 class Light:
     def __init__(self, position=(20, 60, -50), color=(1, 1, 1)):

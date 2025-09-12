@@ -1,2 +1,7 @@
+pyglm
+glm
+numpy
+pywavefront
+moderngl
 pygame>=2.0.0
 PyOpenGL>=3.1.6
